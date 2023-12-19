@@ -1,11 +1,8 @@
-package com.example.Cryptology
+package com.example.dsa
 
 // ...
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -38,30 +35,33 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
-import com.example.dsa.R
-import java.text.Normalizer
 import java.util.Locale
 
+class AffiniSifra : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MaterialTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    AffineCipherActivity()
+                }
+            }
+        }
+    }
+}
 
-
-private fun displayCustomToast(inflater: LayoutInflater, context: Context, parentView: View, text: String) {
-
+/*private fun displayCustomToast(inflater: LayoutInflater, context: Context, parentView: View, text: String) {
+    val layout = inflater.inflate(R.layout.custom_toast_layout, parentView.findViewById(R.id.custom_toast_layout))
     val toast = Toast(context)
     toast.duration = Toast.LENGTH_SHORT
     toast.view = layout
     toast.setText(text)
-}
+}*/
 
 val alphabet = ('a'..'z').joinToString("") + ('0'..'9').joinToString("")
 val m = alphabet.length
 val alphabetArray = alphabet.toCharArray()
 var cipheredAlphabet = alphabetArray
-const val mezera = "xmezerax"
-
-fun removeDiacritics(input: String): String {
-    val normalizedString = Normalizer.normalize(input, Normalizer.Form.NFD)
-    return normalizedString.replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
-}
 
 fun mod(int: Int, mod: Int): Int {
     var result = int % mod
@@ -125,7 +125,7 @@ fun gcd(a: Int, b: Int): Int{
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun SimpleOutlinedTextFieldSample() {
+fun AffineCipherActivity() {
     var text by remember { mutableStateOf("") }
     var texta by remember { mutableStateOf("") }
     var textb by remember { mutableStateOf("") }
@@ -247,4 +247,3 @@ fun SimpleOutlinedTextFieldSample() {
         })
     }
 }
-

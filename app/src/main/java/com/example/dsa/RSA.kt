@@ -1,10 +1,21 @@
 package com.example.dsa
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import java.math.BigInteger
+import java.nio.charset.StandardCharsets
+import java.security.KeyFactory
+import java.security.NoSuchAlgorithmException
+import java.security.PublicKey
 import java.security.SecureRandom
+import java.security.spec.InvalidKeySpecException
+import java.security.spec.X509EncodedKeySpec
+import java.util.Base64
+import javax.crypto.Cipher
 
-class RSA {
+class RSA() {
+
+
     fun returnN(p:Int,q:Int): BigInteger {
         val p = BigInteger(p.toString())
         val q = BigInteger(q.toString())
@@ -12,9 +23,7 @@ class RSA {
         return n
     }
 
-    fun eulerFunction(p:Int,q: Int): BigInteger {
-        val p = BigInteger(p.toString())
-        val q = BigInteger(q.toString())
+    fun eulerFunction(p:BigInteger,q: BigInteger): BigInteger {
         val eulerFunction = p.subtract(BigInteger("1"))*q.subtract(BigInteger("1"))
         return eulerFunction
     }
@@ -67,28 +76,38 @@ class RSA {
         return true
     }
 
-    fun cipher(plainText: String, e: BigInteger, n: BigInteger): String {
-        var cipheredText = ""
+    data class KeyPair(val publicKey: Key, val privateKey: Key)
 
-        for (char in plainText) {
-            val asciiValue = BigInteger.valueOf(char.toLong())
-            val cipheredChar = asciiValue.modPow(e, n)
-            cipheredText += cipheredChar.toString(36) + " " // Convert to base 36 to shorten the string
-        }
+    data class Key(val modulus: BigInteger, val exponent: BigInteger)
 
-        return cipheredText.trim() // Remove trailing space
+    fun generateKeyPair(bitLength: Int): KeyPair {
+        val random = SecureRandom()
+        val p = generateRandomPrime().toBigInteger()
+        val q = generateRandomPrime().toBigInteger()
+        val modulus = p.multiply(q)
+        val phi = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE))
+        val publicKeyExponent = BigInteger("65537")
+        val privateKeyExponent = publicKeyExponent.modInverse(phi)
+        val publicKey = Key(modulus, publicKeyExponent)
+        val privateKey = Key(modulus, privateKeyExponent)
+        return KeyPair(publicKey, privateKey)
     }
 
-    fun decipher(cipherText: String, d: BigInteger, n: BigInteger): String {
-        var decipheredText = ""
+    fun encrypt(message: String, publicKey: Key): String {
+        val messageBytes = message.toByteArray(StandardCharsets.UTF_8)
+        val messageInt = BigInteger(messageBytes)
+        Log.d("MessageInt", messageInt.toString())
+        val encryptedInt = messageInt.modPow(publicKey.exponent, publicKey.modulus)
+        val encryptedBytes = encryptedInt.toByteArray()
+        return encryptedBytes.toString()
+    }
 
-        val cipheredChars = cipherText.split(" ")
-        for (cipheredChar in cipheredChars) {
-            val cipheredValue = BigInteger(cipheredChar, 36) // Convert back from base 36
-            val decipheredChar = cipheredValue.modPow(d, n).toChar()
-            decipheredText += decipheredChar
-        }
-
-        return decipheredText
+    fun decrypt(encrypted: String, privateKey: Key): String {
+        val encryptedBytes = encrypted.toByteArray(StandardCharsets.UTF_8)
+        val encryptedInt = BigInteger(encryptedBytes)
+        Log.d("EncryptedInt", encryptedInt.toString())
+        val decryptedInt = encryptedInt.modPow(privateKey.exponent, privateKey.modulus)
+        val decryptedBytes = decryptedInt.toByteArray()
+        return String(decryptedBytes, StandardCharsets.UTF_8)
     }
 }

@@ -53,6 +53,7 @@ android {
 
 dependencies {
 
+    implementation("androidx.compose.material3:material3")
     implementation("com.github.komputing.khash:keccak:1.1.3")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")

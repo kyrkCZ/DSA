@@ -10,6 +10,7 @@
     <paths xmlns:android="http://schemas.android.com/apk/res/android">
         <cache-path name="shared_images" path="."/>
         <cache-path name="internal_cache" path="cache/"/>
+        <files-path name="my_files" path="."/>
     </paths>
 </provider>
 

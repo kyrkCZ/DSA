@@ -1,5 +1,6 @@
 package com.example.dsa
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -38,6 +39,20 @@ import java.text.Normalizer
 
 var czechAlphabet = false
 var mezera = "XMEZERAX"
+
+
+class ADVFGX : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MaterialTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    AffineCipherActivity()
+                }
+            }
+        }
+    }
+}
 
 fun removeDiacritics(input: String): String {
     val normalizedString = Normalizer.normalize(input, Normalizer.Form.NFD)
@@ -249,10 +264,8 @@ fun generateRandomizedAlphabetMatrix6x6(): Array<Array<Pair<Char, String>>> {
     return matrix
 }
 
-
-@Preview
 @Composable
-fun Activity() {
+fun ADVFGXActivity(context: Context) {
     var activeCipher by remember { mutableStateOf("ADFGX") }
 
     Column {

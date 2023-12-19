@@ -49,7 +49,18 @@ import androidx.compose.ui.unit.dp
 import java.text.Normalizer
 import java.util.Locale
 
-
+class PlaiFair : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MaterialTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    PlaiFairCipherActivity()
+                }
+            }
+        }
+    }
+}
 
 // Function to perform Playfair cipher
 fun playfairCipher(plainText: String, keyword: String, czechAlphabet: Boolean): String {
@@ -293,7 +304,7 @@ fun playfairDecipher(cipherText: String, keyword: String, czechAlphabet: Boolean
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun SimpleOutlinedTextFieldSample() {
+fun PlaiFairCipherActivity() {
     // State variables to store user input and settings
     var plainText by remember { mutableStateOf("") }
     var key by remember { mutableStateOf("") }
@@ -306,7 +317,9 @@ fun SimpleOutlinedTextFieldSample() {
     var showDialog by remember { mutableStateOf(false) }
 
     // UI layout
-    Box(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .verticalScroll(rememberScrollState())) {
         Column(
             modifier = Modifier
                 .fillMaxWidth(),
